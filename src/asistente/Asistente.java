@@ -1,7 +1,11 @@
 package asistente;
+import calculadora.Calculadora;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.script.ScriptException;
+
 import java.text.Normalizer;
 
 public class Asistente {
@@ -32,7 +36,7 @@ public class Asistente {
 		
 	}
 	
-	public String escuchar(String mensaje) {
+	public String escuchar(String mensaje){
 		
 		mensaje = mensaje.toUpperCase();
 		mensaje = Normalizer.normalize(mensaje, Normalizer.Form.NFD);
@@ -49,7 +53,14 @@ public class Asistente {
 				
 				switch (clave) {
 									
-					case "CUANTO ES": return saludosMap.get(clave); //return MetodoQueDevuelveResultado(mensaje);
+					case "CUANTO ES":{
+						String expresion = mensaje.substring(mensaje.indexOf(clave) + clave.length(), mensaje.length());
+						try {
+							return USUARIO + " " + new Calculadora().resolverExpresionMatematica(expresion);
+						} catch (ScriptException e) {
+							e.printStackTrace();
+						}
+					}  
 					
 					case "JUGAMOS?":
 					case "JUGAMOS? PENSA": 	{
