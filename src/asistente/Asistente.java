@@ -1,5 +1,7 @@
 package asistente;
+
 import calculadora.Calculadora;
+import juegos.AdivinaNumero;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,72 +13,128 @@ import java.text.Normalizer;
 public class Asistente {
 
 	private String nombre;
-	private Boolean estoyJugando;
+
+	private boolean estoyAdivinando = false;
+	private int[] range = { 1, 100 };
+	private boolean meEstanAdivinando = false;
+	private int numeroElegido = 12;
+	private int contadorDeIntentos = 0;
+
 	private Map<String, String> saludosMap;
-	public final static String USUARIO = "@delucas"; 
-	
+	public final static String USUARIO = "@delucas";
+
 	public Asistente(String nombre) {
 		this.nombre = nombre;
-		this.estoyJugando = false;
 		cargarSaludosMap();
 	}
-	
+
 	public void cargarSaludosMap() {
-		
+
 		saludosMap = new HashMap<>();
-		saludosMap.put("HOLA", "¡Hola, " + USUARIO + "!");
-		saludosMap.put("BUEN DIA", "¡Hola, " + USUARIO + "!");
-		saludosMap.put("BUENAS TARDES", "¡Hola, " + USUARIO + "!");
-		saludosMap.put("HEY", "¡Hola, " + USUARIO + "!");
+		saludosMap.put("HOLA", "Â¡Hola, " + USUARIO + "!");
+		saludosMap.put("BUEN DIA", "Â¡Hola, " + USUARIO + "!");
+		saludosMap.put("BUENAS TARDES", "Â¡Hola, " + USUARIO + "!");
+		saludosMap.put("HEY", "Â¡Hola, " + USUARIO + "!");
 		saludosMap.put("GRACIAS", "No es nada, " + USUARIO);
 		saludosMap.put("CUANTO ES", USUARIO + " 3");
-		saludosMap.put("SENTIDO", "Disculpa... no entiendo el pedido, " + USUARIO + " ¿podrías repetirlo?");
-		saludosMap.put("JUGAMOS? PENSA", USUARIO + " ¡sale y vale! Pensá un número del 1 al 100");
-		saludosMap.put("JUGAMOS?", USUARIO + " ¡listo!");  //Habría que ver una manera de diferenciar ambos "JUGAMOS"
-		
+		saludosMap.put("SENTIDO", "Disculpa... no entiendo el pedido, " + USUARIO + " Â¿podrias repetirlo?");
+		saludosMap.put("JUGAMOS?", USUARIO + " Â¡sale y vale! PensÃ¡ un nÃºmero del 1 al 100");
+		saludosMap.put("JUGAMOS? PENSA UN NUMERO DEL 1 AL 100", USUARIO + " Â¡listo!");
+
 	}
-	
-	public String escuchar(String mensaje){
-		
+
+	public String escuchar(String mensaje) {
+
 		mensaje = mensaje.toUpperCase();
 		mensaje = Normalizer.normalize(mensaje, Normalizer.Form.NFD);
 		mensaje = mensaje.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+
+		// Juego de adivinar tu nÃºmero
+		if (estoyAdivinando)
+			return Asistente.USUARIO + adivinando(mensaje);
 		
-		if(estoyJugando) {
-			//return MetodoDeJuego(mensaje); 
-			//setear la variable "estoyJugando" en false cuando el juego finaliza.
-		}
+		// Juego de adivinar el nÃºmero del asistente
+		if (meEstanAdivinando)
+			return Asistente.USUARIO + pensandoNumero(mensaje);
 
 		for (String clave : saludosMap.keySet()) {
 			int encontrado = mensaje.indexOf(clave);
 			if (encontrado != -1) {
-				
+
 				switch (clave) {
-									
-					case "CUANTO ES":{
-						String expresion = mensaje.substring(mensaje.indexOf(clave) + clave.length(), mensaje.length());
-						try {
-							return USUARIO + " " + new Calculadora().resolverExpresionMatematica(expresion);
-						} catch (ScriptException e) {
-							e.printStackTrace();
-						}
-					}  
-					
-					case "JUGAMOS?":
-					case "JUGAMOS? PENSA": 	{
-						estoyJugando = true;
-						return saludosMap.get(clave); //return MetodoDeJuego(mensaje); 
+
+				case "CUANTO ES": {
+					String expresion = mensaje.substring(mensaje.indexOf(clave) + clave.length(), mensaje.length());
+					try {
+						return USUARIO + " " + new Calculadora().resolverExpresionMatematica(expresion);
+					} catch (ScriptException e) {
+						e.printStackTrace();
 					}
-					
-					default : return saludosMap.get(clave);
-				
 				}
-				
+
+				case "JUGAMOS?":
+					if (estoyAdivinando)
+						break;
+					estoyAdivinando = true;
+					return saludosMap.get(clave);
+
+				case "JUGAMOS? PENSA UN NUMERO DEL 1 AL 100": {
+					meEstanAdivinando = true;
+					return saludosMap.get(clave); // return MetodoDeJuego(mensaje);
+				}
+
+				default:
+					return saludosMap.get(clave);
+
+				}
+
 			}
-			
+
+		}
+
+		return "Disculpa... no entiendo el pedido, " + USUARIO + "ï¿½podrï¿½as repetirlo?";
+	}
+
+	public String adivinando(String mensaje) {
+		if (range[0] == 1 && range[1] == 100 && mensaje.equals("@" + this.nombre.toUpperCase() + " LISTO")) {
+			return " Â¿es el " + (range[0] + range[1]) / 2 + "?";
+		}
+
+		if (mensaje.equals("@" + this.nombre.toUpperCase() + " MAS GRANDE")) {
+			range[0] = (range[0] + range[1]) / 2;
+			return " Â¿es el " + (range[0] + range[1]) / 2 + "?";
+		}
+
+		if (mensaje.equals("@" + this.nombre.toUpperCase() + " MAS CHICO")) {
+			range[1] = (range[0] + range[1]) / 2;
+			return " Â¿es el " + (range[0] + range[1]) / 2 + "?";
+		}
+		if (mensaje.equals("@" + this.nombre.toUpperCase() + " SI!")) {
+			range[0] = 1;
+			range[1] = 100;
+			estoyAdivinando = false;
+			return " fue divertido :)";
+		}
+		return " No te entendÃ­, Â¿Es mÃ¡s grande o mÃ¡s chico?";
+	}
+
+	public String pensandoNumero(String mensaje) {
+		mensaje = mensaje.replaceAll("[^0-9.]", ""); // Regex que remueve todo lo que no sea numero de la cadena.
+		int guess = Integer.parseInt(mensaje);
+		if (guess == numeroElegido) {
+			contadorDeIntentos++;
+			estoyAdivinando = false;
+			return " Â¡si! Adivinaste en " + contadorDeIntentos + " pasos...";
+		}
+		if ( guess < numeroElegido) {
+			contadorDeIntentos++;
+			return " mÃ¡s grande";
 		}
 		
-		return "Disculpa... no entiendo el pedido, " + USUARIO + "¿podrías repetirlo?";
+		if (guess > numeroElegido) {
+			contadorDeIntentos++;
+			return " mÃ¡s chico";
+		}
+		return " No te entendÃ­, decime un nÃºmero del 1 al 100";
 	}
-	
 }
