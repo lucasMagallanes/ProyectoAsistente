@@ -1,7 +1,6 @@
 package asistente;
 
 import calculadora.Calculadora;
-import juegos.AdivinaNumero;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +79,7 @@ public class Asistente {
 
 				case "JUGAMOS? PENSA UN NUMERO DEL 1 AL 100": {
 					meEstanAdivinando = true;
-					return saludosMap.get(clave); // return MetodoDeJuego(mensaje);
+					return saludosMap.get(clave);
 				}
 
 				default:
@@ -92,7 +91,7 @@ public class Asistente {
 
 		}
 
-		return "Disculpa... no entiendo el pedido, " + USUARIO + "�podr�as repetirlo?";
+		return "Disculpa... no entiendo el pedido, " + USUARIO + "¿podrías repetirlo?";
 	}
 
 	public String adivinando(String mensaje) {
@@ -124,7 +123,9 @@ public class Asistente {
 		if (guess == numeroElegido) {
 			contadorDeIntentos++;
 			estoyAdivinando = false;
-			return " ¡si! Adivinaste en " + contadorDeIntentos + " pasos...";
+			int contadorAux = contadorDeIntentos;
+			contadorDeIntentos = 0;
+			return " ¡si! Adivinaste en " + contadorAux + " pasos...";
 		}
 		if ( guess < numeroElegido) {
 			contadorDeIntentos++;
@@ -135,6 +136,6 @@ public class Asistente {
 			contadorDeIntentos++;
 			return " más chico";
 		}
-		return " No te entendí, decime un número del 1 al 100";
+		return " No te entendí, decime un número del " + range[0] +" al " + range[1];
 	}
 }
