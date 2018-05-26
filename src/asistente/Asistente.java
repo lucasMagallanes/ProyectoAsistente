@@ -7,6 +7,12 @@ import java.util.Map;
 
 import javax.script.ScriptException;
 
+import atencion.Agradecimiento;
+import atencion.Atencion;
+import atencion.Calculo;
+import atencion.Saludo;
+import atencion.SinSentido;
+
 import java.text.Normalizer;
 
 public class Asistente {
@@ -18,28 +24,26 @@ public class Asistente {
 	private boolean meEstanAdivinando = false;
 	private int numeroElegido = 12;
 	private int contadorDeIntentos = 0;
+	private Atencion[] atenciones;
 
 	private Map<String, String> saludosMap;
 	public final static String USUARIO = "@delucas";
 
 	public Asistente(String nombre) {
 		this.nombre = nombre;
-		cargarSaludosMap();
+		asignarCadenaDeAtencion();
 	}
-
-	public void cargarSaludosMap() {
-
-		saludosMap = new HashMap<>();
-		saludosMap.put("HOLA", "Â¡Hola, " + USUARIO + "!");
-		saludosMap.put("BUEN DIA", "Â¡Hola, " + USUARIO + "!");
-		saludosMap.put("BUENAS TARDES", "Â¡Hola, " + USUARIO + "!");
-		saludosMap.put("HEY", "Â¡Hola, " + USUARIO + "!");
-		saludosMap.put("GRACIAS", "No es nada, " + USUARIO);
-		saludosMap.put("CUANTO ES", USUARIO + " 3");
-		saludosMap.put("SENTIDO", "Disculpa... no entiendo el pedido, " + USUARIO + " Â¿podrias repetirlo?");
-		saludosMap.put("JUGAMOS?", USUARIO + " Â¡sale y vale! PensÃ¡ un nÃºmero del 1 al 100");
-		saludosMap.put("JUGAMOS? PENSA UN NUMERO DEL 1 AL 100", USUARIO + " Â¡listo!");
-
+	
+	public void asignarCadenaDeAtencion() {
+		atenciones = new Atencion[4];
+		atenciones[0] = new Saludo();
+		atenciones[1] = new Agradecimiento();
+		atenciones[2] = new Calculo();
+		atenciones[3] = new SinSentido();
+		
+		atenciones[0].establecerSiguiente(atenciones[1]);
+		atenciones[1].establecerSiguiente(atenciones[2]);
+		atenciones[2].establecerSiguiente(atenciones[3]);
 	}
 
 	public String escuchar(String mensaje) {
@@ -48,65 +52,41 @@ public class Asistente {
 		mensaje = Normalizer.normalize(mensaje, Normalizer.Form.NFD);
 		mensaje = mensaje.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
 
-		// Juego de adivinar tu nÃºmero
+		// Juego de adivinar tu número
 		if (estoyAdivinando)
 			return Asistente.USUARIO + adivinando(mensaje);
 		
-		// Juego de adivinar el nÃºmero del asistente
+		// Juego de adivinar el número del asistente
 		if (meEstanAdivinando)
 			return Asistente.USUARIO + pensandoNumero(mensaje);
 
-		for (String clave : saludosMap.keySet()) {
-			int encontrado = mensaje.indexOf(clave);
-			if (encontrado != -1) {
-
-				switch (clave) {
-
-				case "CUANTO ES": {
-					String expresion = mensaje.substring(mensaje.indexOf(clave) + clave.length(), mensaje.length());
-					try {
-						return USUARIO + " " + new Calculadora().resolverExpresionMatematica(expresion);
-					} catch (ScriptException e) {
-						e.printStackTrace();
-					}
-				}
-
-				case "JUGAMOS?":
-					if (estoyAdivinando)
-						break;
-					estoyAdivinando = true;
-					return saludosMap.get(clave);
-
-				case "JUGAMOS? PENSA UN NUMERO DEL 1 AL 100": {
-					meEstanAdivinando = true;
-					return saludosMap.get(clave);
-				}
-
-				default:
-					return saludosMap.get(clave);
-
-				}
-
-			}
-
+		int encontrado = mensaje.indexOf("JUGAMOS? PENSA UN NUMERO DEL 1 AL 100");
+		if (encontrado != -1) {
+			meEstanAdivinando = true;
+			return USUARIO + " ¡listo!";
 		}
-
-		return "Disculpa... no entiendo el pedido, " + USUARIO + "Â¿podrÃ­as repetirlo?";
+		encontrado = mensaje.indexOf("JUGAMOS?");
+		if (encontrado != -1) {
+			estoyAdivinando = true;
+			return USUARIO + " ¡sale y vale! Pensá un número del 1 al 100";
+		}
+		
+		return atenciones[0].atender(mensaje);
 	}
 
 	public String adivinando(String mensaje) {
 		if (range[0] == 1 && range[1] == 100 && mensaje.equals("@" + this.nombre.toUpperCase() + " LISTO")) {
-			return " Â¿es el " + (range[0] + range[1]) / 2 + "?";
+			return " ¿es el " + (range[0] + range[1]) / 2 + "?";
 		}
 
 		if (mensaje.equals("@" + this.nombre.toUpperCase() + " MAS GRANDE")) {
 			range[0] = (range[0] + range[1]) / 2;
-			return " Â¿es el " + (range[0] + range[1]) / 2 + "?";
+			return " ¿es el " + (range[0] + range[1]) / 2 + "?";
 		}
 
 		if (mensaje.equals("@" + this.nombre.toUpperCase() + " MAS CHICO")) {
 			range[1] = (range[0] + range[1]) / 2;
-			return " Â¿es el " + (range[0] + range[1]) / 2 + "?";
+			return " ¿es el " + (range[0] + range[1]) / 2 + "?";
 		}
 		if (mensaje.equals("@" + this.nombre.toUpperCase() + " SI!")) {
 			range[0] = 1;
@@ -114,7 +94,7 @@ public class Asistente {
 			estoyAdivinando = false;
 			return " fue divertido :)";
 		}
-		return " No te entendÃ­, Â¿Es mÃ¡s grande o mÃ¡s chico?";
+		return " No te entendí, ¿Es más grande o más chico?";
 	}
 
 	public String pensandoNumero(String mensaje) {
@@ -125,17 +105,17 @@ public class Asistente {
 			estoyAdivinando = false;
 			int contadorAux = contadorDeIntentos;
 			contadorDeIntentos = 0;
-			return " Â¡si! Adivinaste en " + contadorAux + " pasos...";
+			return " ¡si! Adivinaste en " + contadorAux + " pasos...";
 		}
 		if ( guess < numeroElegido) {
 			contadorDeIntentos++;
-			return " mÃ¡s grande";
+			return " más grande";
 		}
 		
 		if (guess > numeroElegido) {
 			contadorDeIntentos++;
-			return " mÃ¡s chico";
+			return " más chico";
 		}
-		return " No te entendÃ­, decime un nÃºmero del " + range[0] +" al " + range[1];
+		return " No te entendá, decime un número del " + range[0] +" al " + range[1];
 	}
 }

@@ -1,11 +1,11 @@
-package calculadoraTest;
+package asistenteTest;
 
 import asistente.Asistente;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class calculosTest {
+public class CalculosTest {
 	public final static String USUARIO = "delucas";
 
 	Asistente jenkins;
