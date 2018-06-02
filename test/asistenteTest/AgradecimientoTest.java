@@ -19,7 +19,7 @@ public class AgradecimientoTest {
 	@Test
 	public void agradecimiento() {
 		String[] mensajes = {
-				"¡Muchas gracias, @jenkins!",
+				"Â¡Muchas gracias, @jenkins!",
 				"@jenkins gracias",
 				"gracias @jenkins"
 		};

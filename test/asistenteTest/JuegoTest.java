@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import asistente.Asistente;
 
-public class MasChicoMasGrandeTest {
+public class JuegoTest {
 
 	public final static String USUARIO = "delucas";
 	public final static int ELEGIDO = 12;
@@ -20,28 +20,28 @@ public class MasChicoMasGrandeTest {
 	@Test
 	public void adivinando() {
 		Assert.assertEquals(
-				"@delucas ¡sale y vale! Pensá un número del 1 al 100",
+				"@delucas Â¡sale y vale! PensÃ¡ un nÃºmero del 1 al 100",
 				jenkins.escuchar("@jenkins jugamos?")
 			);
 		
 		Assert.assertEquals(
-				"@delucas ¿es el 50?",
+				"@delucas Â¿es el 50?",
 				jenkins.escuchar("@jenkins listo")
 			);
 		
 		Assert.assertEquals(
-				"@delucas ¿es el 75?",
-				jenkins.escuchar("@jenkins más grande")
+				"@delucas Â¿es el 75?",
+				jenkins.escuchar("@jenkins mÃ¡s grande")
 			);
 		
 		Assert.assertEquals(
-				"@delucas ¿es el 62?",
-				jenkins.escuchar("@jenkins más chico")
+				"@delucas Â¿es el 62?",
+				jenkins.escuchar("@jenkins mÃ¡s chico")
 			);
 		
 		Assert.assertEquals(
-				"@delucas ¿es el 68?",
-				jenkins.escuchar("@jenkins más grande")
+				"@delucas Â¿es el 68?",
+				jenkins.escuchar("@jenkins mÃ¡s grande")
 			);
 		
 		Assert.assertEquals(
@@ -53,17 +53,17 @@ public class MasChicoMasGrandeTest {
 	@Test
 	public void pensandoNumero() {
 		Assert.assertEquals(
-				"@delucas ¡listo!",
-				jenkins.escuchar("@jenkins jugamos? Pensá un número del 1 al 100")
+				"@delucas Â¡listo!",
+				jenkins.escuchar("@jenkins jugamos? PensÃ¡ un nÃºmero del 1 al 100")
 			);
 		
 		Assert.assertEquals(
-				"@delucas más chico",
+				"@delucas mÃ¡s chico",
 				jenkins.escuchar("@jenkins es el 50?")
 			);
 		
 		Assert.assertEquals(
-				"@delucas ¡si! Adivinaste en 2 pasos...",
+				"@delucas Â¡si! Adivinaste en 2 pasos...",
 				jenkins.escuchar("@jenkins es el 12?")
 			);
 		
