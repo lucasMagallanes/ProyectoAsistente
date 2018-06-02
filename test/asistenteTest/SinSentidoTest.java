@@ -23,7 +23,7 @@ public final static String USUARIO = "delucas";
 		};
 		for (String mensaje : mensajes) {
 			Assert.assertEquals(
-					"Disculpa... no entiendo el pedido, @delucas ¿podrías repetirlo?",
+					"Disculpa... no entiendo el pedido, @delucas Â¿podrÃ­as repetirlo?",
 					jenkins.escuchar(mensaje)
 			);
 		}

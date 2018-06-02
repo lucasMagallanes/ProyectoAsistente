@@ -29,7 +29,7 @@ public class Calculadora {
 		String aux[] = expresion.split("%");
 
 		if (aux.length > 1) {
-			// Divido el porcentaje por 100 para después poder multiplicarlo por el total.
+			// Divido el porcentaje por 100 para despuÃ©s poder multiplicarlo por el total.
 			String tanto = "(" + aux[0] + "/100) * (";
 
 			String total = aux[1].replace("DE", "");
