@@ -12,14 +12,18 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class ChuckNorris implements Atencion {
+public class ChuckNorris extends Testeable implements Atencion {
 
 	private Atencion siguiente;
-	private static final String URL_CHUCK_NORRIS= "https://api.chucknorris.io/jokes/random";
+	private static final String URL_CHUCK_NORRIS = "https://api.chucknorris.io/jokes/random";
+	private static ChuckNorris instancia;
 	
+	private ChuckNorris() {
+	}
+
 	public void establecerSiguiente(Atencion siguiente) {
 		this.siguiente = siguiente;
-		
+
 	}
 
 	public String atender(String mensaje, String nombreAsistente, String nombreUsuario) {
@@ -29,26 +33,28 @@ public class ChuckNorris implements Atencion {
 		}
 		return siguiente.atender(mensaje, nombreAsistente, nombreUsuario);
 	}
-	
+
 	private String obtenerChuckNorrisFact() {
-    	URL chuckUrl = null;
+		if (modoTest) {
+			return "Chuck mató dos tiros de un solo pájaro.";
+		}
+		URL chuckUrl = null;
 		try {
 			chuckUrl = new URL(URL_CHUCK_NORRIS);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-        URLConnection chuckConnection = null;
+		URLConnection chuckConnection = null;
 		try {
 			chuckConnection = chuckUrl.openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        chuckConnection.addRequestProperty("User-Agent", 
-        		"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
-        JsonNode rootNode = null;
+		chuckConnection.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+		JsonNode rootNode = null;
 		try {
-			rootNode = new ObjectMapper().readTree(new JsonFactory().createJsonParser(new InputStreamReader(
-					chuckConnection.getInputStream())));
+			rootNode = new ObjectMapper().readTree(
+					new JsonFactory().createJsonParser(new InputStreamReader(chuckConnection.getInputStream())));
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
@@ -56,8 +62,14 @@ public class ChuckNorris implements Atencion {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        JsonNode rootCondition = rootNode.path("value");
-        return rootCondition.getTextValue();
+		JsonNode rootCondition = rootNode.path("value");
+		return rootCondition.getTextValue();
+	}
+	
+    public static ChuckNorris getSingletonInstance() {
+        if (instancia == null){
+        	instancia = new ChuckNorris();
+        }        
+        return instancia;
     }
-
 }
