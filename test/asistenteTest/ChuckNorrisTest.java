@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asistente.Asistente;
+import atencion.ChuckNorris;
 
 public class ChuckNorrisTest {
 
@@ -15,12 +16,14 @@ public final static String USUARIO = "delucas";
 	@Before
 	public void setup() {
 		jenkins = new Asistente("jenkins");
+		ChuckNorris.getSingletonInstance().setModoTest();
 	}
 	
 	@Test
 	public void fraseChuckNorris() {
 		String mensaje = "@jenkins decime una frase de Chuck Norris.";
-		Assert.assertTrue(jenkins.escuchar(mensaje).indexOf("Frase de Chuck Norris: ") != -1);
+		Assert.assertEquals("Frase de Chuck Norris: Chuck mató dos tiros de un solo pájaro.",
+				jenkins.escuchar(mensaje));
 	}
 
 }

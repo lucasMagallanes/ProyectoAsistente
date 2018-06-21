@@ -34,8 +34,8 @@ public class Asistente {
 		atenciones[3] = new Juego();
 		atenciones[4] = new CambioDeUnidades();
 		atenciones[5] = new LeyesRobotica();
-		atenciones[6] = new ChuckNorris();
-		atenciones[7] = new Clima();
+		atenciones[6] = ChuckNorris.getSingletonInstance();
+		atenciones[7] = Clima.getSingletonInstance();
 		atenciones[8] = new DatoTemporario();
 		atenciones[9] = new SinSentido();
 		
@@ -63,7 +63,14 @@ public class Asistente {
 		String respuesta = asistente.escuchar("@jenkins decime una frase de Chuck Norris.");
 		System.out.println(respuesta);
 		
+//		Clima.getSingletonInstance().setModoTest();
 		respuesta = asistente.escuchar("@jenkins quiero saber el clima de San Justo");
+		System.out.println(respuesta);
+		
+		respuesta = asistente.escuchar("@jenkins quiero saber el clima de Seattle");
+		System.out.println(respuesta);
+		
+		respuesta = asistente.escuchar("@jenkins quiero saber el clima de Berlin");
 		System.out.println(respuesta);
 	}
 }
