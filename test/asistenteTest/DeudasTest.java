@@ -1,5 +1,6 @@
 package asistenteTest;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,11 @@ public class DeudasTest {
 	public void setup() {
 		jenkins = new Asistente("jenkins");
 		da = new DADeuda();
+	}
+	
+	@After
+	public void limpiar() {
+		da.eliminarTodo();
 	}
 	
 	@Test
