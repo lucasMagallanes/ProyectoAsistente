@@ -11,6 +11,7 @@ import atencion.Imagen9Gag;
 import atencion.ImagenMeme;
 import atencion.Juego;
 import atencion.LeyesRobotica;
+import atencion.ManejoDeuda;
 import atencion.Saludo;
 import atencion.SinSentido;
 import imagen.ClienteGUI;
@@ -32,7 +33,8 @@ public class Asistente {
 	}
 	
 	public void asignarCadenaDeAtencion() {
-		atenciones = new Atencion[12];
+		atenciones = new Atencion[13];
+		
 		atenciones[0] = new Saludo();
 		atenciones[1] = new Agradecimiento();
 		atenciones[2] = new Calculo();
@@ -44,7 +46,8 @@ public class Asistente {
 		atenciones[8] = new DatoTemporario();
 		atenciones[9] = new Imagen9Gag();
 		atenciones[10] = new ImagenMeme();
-		atenciones[11] = new SinSentido();
+		atenciones[11] = new ManejoDeuda();
+		atenciones[12] = new SinSentido();
 		
 		atenciones[0].establecerSiguiente(atenciones[1]);
 		atenciones[1].establecerSiguiente(atenciones[2]);
@@ -57,6 +60,7 @@ public class Asistente {
 		atenciones[8].establecerSiguiente(atenciones[9]);
 		atenciones[9].establecerSiguiente(atenciones[10]);
 		atenciones[10].establecerSiguiente(atenciones[11]);
+		atenciones[11].establecerSiguiente(atenciones[12]);
 	}
 
 	public String escuchar(String mensaje) {
