@@ -15,7 +15,7 @@ public class ImagenMeme implements Atencion {
 	public String atender(String mensaje, String nombreAsistente, String nombreUsuario) {
 		String consulta = mensaje.toLowerCase();
 		String memeAMostrar;
-		final String regex = "(@" + nombreAsistente + ")( meme)* (take my money|its a trap)";
+		final String regex = "(@" + nombreAsistente + ").*(meme)*(take my money|its a trap|bud luck brian|piensa|einstein|traeme la copa|caballero|sampaoli|higua[i|í]n|argentina|macritip|estudio|parcial|universidad|facultad|pensando en otra|ojo)";
 		final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
 		final Matcher matcher = pattern.matcher(consulta);
 
