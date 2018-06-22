@@ -5,5 +5,8 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/home/vanessab/Documentos/ProyectoAsistente/jackson-all-1.7.6.jar"/>
+	<classpathentry kind="src" path="memes"/>
+	<classpathentry kind="lib" path="/home/vanessab/Documentos/ProyectoAsistente/rome-1.0.jar"/>
+	<classpathentry kind="lib" path="/home/vanessab/Documentos/ProyectoAsistente/jdom-1.1.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

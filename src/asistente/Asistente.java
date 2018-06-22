@@ -7,10 +7,13 @@ import atencion.CambioDeUnidades;
 import atencion.ChuckNorris;
 import atencion.Clima;
 import atencion.DatoTemporario;
+import atencion.Imagen9Gag;
+import atencion.ImagenMeme;
 import atencion.Juego;
 import atencion.LeyesRobotica;
 import atencion.Saludo;
 import atencion.SinSentido;
+import imagen.ClienteGUI;
 
 import java.text.Normalizer;
 
@@ -18,16 +21,18 @@ public class Asistente {
 
 	private String nombre;
 	private Atencion[] atenciones;
+	private ClienteGUI ventana;
 
 	public final static String USUARIO = "@delucas";
 
 	public Asistente(String nombre) {
 		this.nombre = nombre;
+		this.ventana = new ClienteGUI("Test");
 		asignarCadenaDeAtencion();
 	}
 	
 	public void asignarCadenaDeAtencion() {
-		atenciones = new Atencion[10];
+		atenciones = new Atencion[12];
 		atenciones[0] = new Saludo();
 		atenciones[1] = new Agradecimiento();
 		atenciones[2] = new Calculo();
@@ -37,7 +42,9 @@ public class Asistente {
 		atenciones[6] = ChuckNorris.getSingletonInstance();
 		atenciones[7] = Clima.getSingletonInstance();
 		atenciones[8] = new DatoTemporario();
-		atenciones[9] = new SinSentido();
+		atenciones[9] = new Imagen9Gag();
+		atenciones[10] = new ImagenMeme();
+		atenciones[11] = new SinSentido();
 		
 		atenciones[0].establecerSiguiente(atenciones[1]);
 		atenciones[1].establecerSiguiente(atenciones[2]);
@@ -48,6 +55,8 @@ public class Asistente {
 		atenciones[6].establecerSiguiente(atenciones[7]);
 		atenciones[7].establecerSiguiente(atenciones[8]);
 		atenciones[8].establecerSiguiente(atenciones[9]);
+		atenciones[9].establecerSiguiente(atenciones[10]);
+		atenciones[10].establecerSiguiente(atenciones[11]);
 	}
 
 	public String escuchar(String mensaje) {
@@ -61,16 +70,24 @@ public class Asistente {
 	public static void main(String[] args) {
 		Asistente asistente = new Asistente("jenkins");
 		String respuesta = asistente.escuchar("@jenkins decime una frase de Chuck Norris.");
-		System.out.println(respuesta);
+		asistente.ventana.imprimir(respuesta);
 		
 //		Clima.getSingletonInstance().setModoTest();
 		respuesta = asistente.escuchar("@jenkins quiero saber el clima de San Justo");
-		System.out.println(respuesta);
+		asistente.ventana.imprimir(respuesta);
 		
 		respuesta = asistente.escuchar("@jenkins quiero saber el clima de Seattle");
-		System.out.println(respuesta);
+		asistente.ventana.imprimir(respuesta);
 		
 		respuesta = asistente.escuchar("@jenkins quiero saber el clima de Berlin");
-		System.out.println(respuesta);
+		asistente.ventana.imprimir(respuesta);
+		
+		respuesta = asistente.escuchar("@jenkins take my money");
+		asistente.ventana.imprimirImagen(respuesta);
+		
+		respuesta = asistente.escuchar("@jenkins quiero una imagen de 9gag");
+		String[] respuestas = respuesta.split("\\|");
+		asistente.ventana.imprimirImagen(respuestas[1]);
+		asistente.ventana.imprimir(respuestas[0]);
 	}
 }
