@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-mapping>
+	<class name="modelos.Deuda" table="deuda">
+		<id column="deudaID" name="deudaID" type="int">
+              <generator class="increment" />
+		</id>
+		<property column="deudorID" name="deudorID" type="int" />
+		<property column="prestamistaID" name="prestamistaID" type="int" />
+		<property column="importe" name="importe" type="double" />
+	</class>
+</hibernate-mapping>
