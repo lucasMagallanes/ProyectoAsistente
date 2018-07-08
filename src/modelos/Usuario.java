@@ -2,7 +2,7 @@ package modelos;
 
 public class Usuario {
 	private int id;
-	private String nombre;
+	private String alias;
 	
 	public int getId() {
 		return id;
@@ -10,15 +10,15 @@ public class Usuario {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getNombre() {
-		return nombre;
+	public String getAlias() {
+		return alias;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setAlias(String nombre) {
+		this.alias = nombre;
 	}
 	
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + "]";
+		return "Usuario [id=" + id + ", alias=" + alias + "]";
 	}
 }
