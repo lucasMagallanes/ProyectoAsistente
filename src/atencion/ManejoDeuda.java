@@ -137,12 +137,12 @@ public class ManejoDeuda implements Atencion {
 		
 		for(Deuda deuda: deudas) {
 			Usuario prestamista = new DAUsuario().obtenerUsuario(deuda.getPrestamistaID());
-			salida+= "le debés $" + df.format(deuda.getImporte()) + " a @" + prestamista.getNombre() + ". ";
+			salida+= "le debés $" + df.format(deuda.getImporte()) + " a @" + prestamista.getAlias() + ". ";
 		}
 		
 		for(Deuda prestamo: prestamos) {
 			Usuario deudor = new DAUsuario().obtenerUsuario(prestamo.getDeudorID());
-			salida+= "@" + deudor.getNombre() + " te debe $" + df.format(prestamo.getImporte()) + ". ";
+			salida+= "@" + deudor.getAlias() + " te debe $" + df.format(prestamo.getImporte()) + ". ";
 		}
 		
 		return salida;

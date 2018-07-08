@@ -11,14 +11,18 @@ import org.hibernate.Session;
 import modelos.Usuario;
 
 public class DAUsuario {
-	public Usuario obtenerUsuario(String nombre) {
-		Session session = ConectorSingleton.getInstance().getSession();
-
+	Session session;
+	
+	public DAUsuario() {
+		session = ConectorSingleton.getInstance().getSession();
+	}
+	
+	public Usuario obtenerUsuario(String alias) {
 		// Query para consultar si ya existe un usuario con ese nombre.
 		CriteriaBuilder cb1 = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> criteriaQuery = cb1.createQuery(Usuario.class);
 		Root<Usuario> tabla = criteriaQuery.from(Usuario.class);
-		criteriaQuery.select(tabla).where(cb1.equal(tabla.get("nombre"), nombre));
+		criteriaQuery.select(tabla).where(cb1.equal(tabla.get("alias"), alias));
 		List<Usuario> lista = session.createQuery(criteriaQuery).getResultList();
 		
 		
@@ -32,8 +36,6 @@ public class DAUsuario {
 	}
 	
 	public Usuario obtenerUsuario(int usuarioID) {
-		Session session = ConectorSingleton.getInstance().getSession();
-
 		// Query para consultar si ya existe un usuario con ese nombre.
 		CriteriaBuilder cb1 = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> criteriaQuery = cb1.createQuery(Usuario.class);
@@ -49,5 +51,11 @@ public class DAUsuario {
 			return (Usuario) iter.next();
 		
 		return null;
+	}
+	
+	public void ingresarUsuario(Usuario u) {
+		session.getTransaction().begin();
+		session.saveOrUpdate(u);
+		session.getTransaction().commit();
 	}
 }

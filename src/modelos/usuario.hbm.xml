@@ -6,6 +6,10 @@
 		<id column="id" name="id" type="int">
               <generator class="increment" />
 		</id>
+		<property column="alias" name="alias" type="string" />
 		<property column="nombre" name="nombre" type="string" />
+		<property column="apellido" name="apellido" type="string" />
+		<property column="email" name="email" type="string" />
+		<property column="contrasenia" name="contrasenia" type="string" />
 	</class>
 </hibernate-mapping>
