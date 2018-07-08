@@ -38,7 +38,7 @@ public class PrincipalFrame extends JDialog {
 		list.setBounds(38, 117, 613, 164);
 		getContentPane().add(list);
 		
-		iniciarConversacionBtn = new JButton("Iniciar Conversación");
+		iniciarConversacionBtn = new JButton("Iniciar Conversaci\u00f3n");
 		iniciarConversacionBtn.setBounds(38, 356, 186, 25);
 		getContentPane().add(iniciarConversacionBtn);
 		

@@ -14,7 +14,7 @@ public class CrearSalaFrame extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
 	private JTextField textField_1;
-	private JButton btnCrear;
+	private JButton botonCrear;
 
 	public CrearSalaFrame() {
 		setTitle("Sala");
@@ -26,9 +26,9 @@ public class CrearSalaFrame extends JDialog {
 		getContentPane().add(textField);
 		textField.setColumns(10);
 
-		JRadioButton rdbtnPrivada = new JRadioButton("Privada");
-		rdbtnPrivada.setBounds(101, 168, 149, 23);
-		getContentPane().add(rdbtnPrivada);
+		JRadioButton opcionPrivada = new JRadioButton("Privada");
+		opcionPrivada.setBounds(101, 168, 149, 23);
+		getContentPane().add(opcionPrivada);
 
 		textField_1 = new JTextField();
 		textField_1.setBounds(101, 123, 338, 19);
@@ -39,10 +39,10 @@ public class CrearSalaFrame extends JDialog {
 		list.setBounds(101, 237, 457, 92);
 		getContentPane().add(list);
 
-		btnCrear = new JButton("Crear");
-		btnCrear.setBounds(226, 372, 117, 25);
-		btnCrear.addActionListener(e->crearSala());
-		getContentPane().add(btnCrear);
+		botonCrear = new JButton("Crear");
+		botonCrear.setBounds(226, 372, 117, 25);
+		botonCrear.addActionListener(e->crearSala());
+		getContentPane().add(botonCrear);
 
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(355, 372, 117, 25);
@@ -53,7 +53,7 @@ public class CrearSalaFrame extends JDialog {
 		lblNombre.setBounds(105, 43, 70, 15);
 		getContentPane().add(lblNombre);
 
-		JLabel lblTpico = new JLabel("Tópico");
+		JLabel lblTpico = new JLabel("T\u00f3pico");
 		lblTpico.setBounds(101, 103, 70, 15);
 		getContentPane().add(lblTpico);
 
