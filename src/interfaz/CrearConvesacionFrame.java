@@ -1,15 +1,8 @@
 package interfaz;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JList;
-import javax.swing.JComboBox;
 import java.awt.List;
+
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 public class CrearConvesacionFrame extends JDialog {

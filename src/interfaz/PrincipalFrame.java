@@ -1,12 +1,16 @@
 package interfaz;
 
-import java.awt.List;
-
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import modelos.Sala;
 
 public class PrincipalFrame extends JDialog {
 
@@ -15,6 +19,14 @@ public class PrincipalFrame extends JDialog {
 	private JButton btnPerfil;
 	private JButton iniciarConversacionBtn;
 	private JButton crearSalaBtn;
+	private JTable table;
+	private final static String COLUMN_SALA = "Sala";
+	private final static String COLUMN_NOMBRE = "Nombre";
+	private final static String COLUMN_TOPICO = "Tópico";
+	private final static String COLUMN_BOTON = "Botón";
+	
+	DefaultTableModel tableModel;
+	private String[] columnNames = {COLUMN_SALA,COLUMN_NOMBRE,COLUMN_TOPICO,COLUMN_BOTON};
 	
 	public PrincipalFrame() {
 		setBounds(100, 100, 700, 450);
@@ -33,12 +45,7 @@ public class PrincipalFrame extends JDialog {
 		JSeparator separator = new JSeparator();
 		separator.setBounds(31, 58, 126, 2);
 		getContentPane().add(separator);
-		
-		List list = new List();
-		list.setBounds(38, 117, 613, 164);
-		getContentPane().add(list);
-		
-		iniciarConversacionBtn = new JButton("Iniciar Conversaci\u00f3n");
+		iniciarConversacionBtn = new JButton("Iniciar Conversación");
 		iniciarConversacionBtn.setBounds(38, 356, 186, 25);
 		getContentPane().add(iniciarConversacionBtn);
 		
@@ -54,6 +61,33 @@ public class PrincipalFrame extends JDialog {
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(38, 338, 186, 2);
 		getContentPane().add(separator_1);
+		
+		setTabla();
+	}
+
+	private void setTabla() {
+		Object[][] data = { {new Sala(1,"Uno","Unoo"),1,"Uno"},
+				{new Sala(2,"Dos","Doss"),2,"Dos","Doss"},
+				{new Sala(3,"Tres","Tress"),3,"Tres","Tress"}, 
+				{new Sala(4,"Cuatro","Cuatroo"),4,"Cuatro","Cuatroo"},
+				{new Sala(5,"Cinco","Cincoo"),5,"Cinco","Cincoo"},
+				{new Sala(6,"Seis","Seiss"),6,"Seis","Seiss"},
+				{new Sala(7,"Siete","Sietee"),7,"Siete","Sietee"}, 
+				{new Sala(8,"Ocho","Ochoo"),8,"Ocho","Ochoo"},
+				{new Sala(9,"Nueve","Nuevee"),9,"Nueve","Nuevee"}  };
+		
+		tableModel= new DefaultTableModel(data,columnNames);
+		table = new JTable(tableModel);
+		table.setBounds(33, 120, 629, 158);
+		table.getColumnModel().getColumn(3).setCellRenderer(new SalaTableButtonRenderer());
+		table.getColumnModel().getColumn(3).setCellEditor(new SalaTableRenderer(new JCheckBox()));
+		table.getColumnModel().getColumn(0).setWidth(0);
+		table.getColumnModel().getColumn(0).setMinWidth(0);
+		table.getColumnModel().getColumn(0).setMaxWidth(0);
+		
+		JScrollPane scroll = new JScrollPane(table);
+	    scroll.setBounds(33, 120, 629, 158);
+		getContentPane().add(scroll);
 	}
 
 	private void crearSala() {
