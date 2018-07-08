@@ -45,7 +45,6 @@ public class PrincipalFrame extends JDialog {
 		JSeparator separator = new JSeparator();
 		separator.setBounds(31, 58, 126, 2);
 		getContentPane().add(separator);
-		
 		iniciarConversacionBtn = new JButton("Iniciar Conversación");
 		iniciarConversacionBtn.setBounds(38, 356, 186, 25);
 		getContentPane().add(iniciarConversacionBtn);

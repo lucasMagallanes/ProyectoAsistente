@@ -85,7 +85,7 @@ public class EditarFrame extends JDialog {
 		contentPane.add(usuarioTextField);
 		usuarioTextField.setColumns(10);
 
-		JLabel lblEmail = new JLabel("Contraseña");
+		JLabel lblEmail = new JLabel("Contrase\u00f1a");
 		lblEmail.setBounds(70, 257, 101, 15);
 		contentPane.add(lblEmail);
 

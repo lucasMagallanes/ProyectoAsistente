@@ -1,21 +1,27 @@
 package interfaz;
 
 import java.awt.EventQueue;
+import java.util.Observable;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import asistente.Cliente;
+
 import javax.swing.JSeparator;
 
-public class LoginFrame extends JFrame {
+public class LoginFrame  extends Observable{
 
 	private static final long serialVersionUID = 8674831954259826014L;
 	private JPanel contentPane;
 	private JTextField usuarioTextField;
-	private JTextField ContraseniaTextField;
+	private JPasswordField ContraseniaTextField;
+	private JFrame frame;
 
 	/**
 	 * Launch the application.
@@ -25,36 +31,42 @@ public class LoginFrame extends JFrame {
 			public void run() {
 				try {
 					LoginFrame frame = new LoginFrame();
-					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-
+	
+	public LoginFrame(Cliente motor) {
+		this();
+		addObserver(motor);
+	}
+	
 	public LoginFrame() {
 		setComponentes();
 	}
 
 	private void setComponentes() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		frame = new JFrame("Chat");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+		frame.setContentPane(contentPane);
 		
 		JLabel usuarioLbl = new JLabel("Usuario");
 		usuarioLbl.setBounds(155, 41, 55, 15);
 		
-		JLabel contraseniaLbl = new JLabel("Contraseña");
+		JLabel contraseniaLbl = new JLabel("Contrase\u00f1a");
 		contraseniaLbl.setBounds(155, 88, 83, 15);
 		
 		usuarioTextField = new JTextField();
 		usuarioTextField.setBounds(154, 57, 145, 19);
 		usuarioTextField.setColumns(10);
 		
-		ContraseniaTextField = new JTextField();
+		ContraseniaTextField = new JPasswordField();//new JTextField();
 		ContraseniaTextField.setBounds(155, 105, 144, 19);
 		ContraseniaTextField.setColumns(10);
 		contentPane.setLayout(null);
@@ -63,19 +75,21 @@ public class LoginFrame extends JFrame {
 		contentPane.add(usuarioLbl);
 		contentPane.add(usuarioTextField);
 		
-		JButton loginBtn = new JButton("LOGIN");
-		loginBtn.setBounds(165, 136, 126, 32);
-		loginBtn.addActionListener(e->abrirVentanaPrincipal());
-		contentPane.add(loginBtn);
+		JButton loginBoton = new JButton("LOGIN");
+		loginBoton.setBounds(165, 136, 126, 32);
+		loginBoton.addActionListener(e->abrirVentanaPrincipal());
+		contentPane.add(loginBoton);
 		
-		JButton registroBtn = new JButton("Registrarse");
-		registroBtn.setBounds(165, 205, 126, 25);
-		registroBtn.addActionListener(e->abrirRegistroFrame());
-		contentPane.add(registroBtn);		
+		JButton registroBoton = new JButton("Registrarse");
+		registroBoton.setBounds(165, 205, 126, 25);
+		registroBoton.addActionListener(e->abrirRegistroFrame());
+		contentPane.add(registroBoton);		
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(155, 191, 155, 2);
 		contentPane.add(separator);
+		
+		frame.setVisible(true);
 	}
 
 	private void abrirRegistroFrame() {
