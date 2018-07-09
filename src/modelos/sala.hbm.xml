@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-mapping>
+	<class name="modelos.Sala" table="sala">
+		<id column="id" name="sala_Id" type="int">
+              <generator class="increment" />
+		</id>
+		<property column="Administrador" name="Administrador" type="int" />
+		<property column="sala_Descripcion" name="sala_Descripcion" type="string" />
+		<property column="sala_Topico" name="sala_Topico" type="string" />
+		<property column="sala_Privada" name="sala_Privada" type="bit" />
+	</class>
+</hibernate-mapping>

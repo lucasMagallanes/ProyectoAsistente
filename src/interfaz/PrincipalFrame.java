@@ -81,15 +81,15 @@ public class PrincipalFrame extends JDialog {
 	}
 
 	private void setTabla() {
-		Object[][] data = { {new Sala(1,"Uno","Unoo"),1,"Uno"},
-				{new Sala(2,"Dos","Doss"),2,"Dos","Doss"},
-				{new Sala(3,"Tres","Tress"),3,"Tres","Tress"}, 
-				{new Sala(4,"Cuatro","Cuatroo"),4,"Cuatro","Cuatroo"},
-				{new Sala(5,"Cinco","Cincoo"),5,"Cinco","Cincoo"},
-				{new Sala(6,"Seis","Seiss"),6,"Seis","Seiss"},
-				{new Sala(7,"Siete","Sietee"),7,"Siete","Sietee"}, 
-				{new Sala(8,"Ocho","Ochoo"),8,"Ocho","Ochoo"},
-				{new Sala(9,"Nueve","Nuevee"),9,"Nueve","Nuevee"}  };
+		Object[][] data = { {new Sala(1,null,"Uno","Unoo"),1,"Uno"},
+				{new Sala(2,null, "Dos","Doss"),2,"Dos","Doss"},
+				{new Sala(3,null,"Tres","Tress"),3,"Tres","Tress"}, 
+				{new Sala(4,null,"Cuatro","Cuatroo"),4,"Cuatro","Cuatroo"},
+				{new Sala(5,null,"Cinco","Cincoo"),5,"Cinco","Cincoo"},
+				{new Sala(6,null,"Seis","Seiss"),6,"Seis","Seiss"},
+				{new Sala(7,null,"Siete","Sietee"),7,"Siete","Sietee"}, 
+				{new Sala(8,null,"Ocho","Ochoo"),8,"Ocho","Ochoo"},
+				{new Sala(9,null,"Nueve","Nuevee"),9,"Nueve","Nuevee"}  };
 		
 		tableModel= new DefaultTableModel(data,columnNames);
 		table = new JTable(tableModel);

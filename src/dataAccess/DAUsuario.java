@@ -26,8 +26,6 @@ public class DAUsuario {
 		criteriaQuery.select(tabla).where(cb1.equal(tabla.get("alias"), alias));
 		List<Usuario> lista = session.createQuery(criteriaQuery).getResultList();
 		
-		
-
 		Iterator<Usuario> iter = lista.iterator();
 		
 		if(iter.hasNext())
@@ -44,14 +42,18 @@ public class DAUsuario {
 		criteriaQuery.select(tabla).where(cb1.equal(tabla.get("id"), usuarioID));
 		List<Usuario> lista = session.createQuery(criteriaQuery).getResultList();
 		
-		
-
 		Iterator<Usuario> iter = lista.iterator();
 		
 		if(iter.hasNext())
 			return (Usuario) iter.next();
 		
 		return null;
+	}
+
+	public void actualizarUsuario(Usuario u) {
+		session.getTransaction().begin();
+		session.saveOrUpdate(u);
+		session.getTransaction().commit();
 	}
 	
 	public Usuario obtenerUsuarioPorCredenciales(String alias, String contrasenia) {

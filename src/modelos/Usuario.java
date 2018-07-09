@@ -1,5 +1,7 @@
 package modelos;
 
+import java.util.List;
+
 public class Usuario {
 	private int id;
 	private String alias;
@@ -7,7 +9,8 @@ public class Usuario {
 	private String apellido;
 	private String email;
 	private String contrasenia;
-	
+  private List<Contacto> contactos;
+
 	public Usuario() {
 		
 	}
@@ -29,6 +32,8 @@ public class Usuario {
 	}
 	
 	public String getAlias() {
+		if(alias==null)
+			return "-";
 		return alias;
 	}
 	
@@ -66,6 +71,12 @@ public class Usuario {
 	
 	public void setContrasenia(String contrasenia) {
 		this.contrasenia = contrasenia;
+	}	
+	public List<Contacto> getContactos() {
+		return contactos;
+	}
+	public void setContactos(List<Contacto> contactos) {
+		this.contactos = contactos;
 	}
 	
 	@Override
