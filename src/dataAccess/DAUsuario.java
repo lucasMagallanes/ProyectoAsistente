@@ -49,12 +49,6 @@ public class DAUsuario {
 		
 		return null;
 	}
-
-	public void actualizarUsuario(Usuario u) {
-		session.getTransaction().begin();
-		session.saveOrUpdate(u);
-		session.getTransaction().commit();
-	}
 	
 	public Usuario obtenerUsuarioPorCredenciales(String alias, String contrasenia) {
 		CriteriaBuilder cb1 = session.getCriteriaBuilder();
