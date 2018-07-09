@@ -5,23 +5,33 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+
+import dataAccess.DAUsuario;
+import modelos.Usuario;
 
 public class EditarFrame extends JDialog {
 
 	private static final long serialVersionUID = 6194239582768689856L;
 	private JPanel contentPane;
 	private JTextFieldAlfabetico nombreTextField;
-	private JTextFieldAlfabetico ApellidoTextField;
+	private JTextFieldAlfabetico apellidoTextField;
 	private JTextFieldAlfabetico emailtextField;
 	private JTextFieldAlfabetico usuarioTextField;
-	private JTextField contraseniaTextField;
+	private JPasswordField contraseniaAntTextField;
 	private JButton editarBtn;
 	private JButton guardarBtn;
 	private JButton cancelarBtn;
+	private Usuario usuario;
+	private JPasswordField contraseniaNuevatextField;
+	private JLabel lblContraseniaAnt;
+	private JLabel lblContraseniaNueva;
+	private PrincipalFrame pFrame;
 
-	public EditarFrame() {
+	public EditarFrame(PrincipalFrame pFrame, Usuario usuario) {
+		this.pFrame = pFrame;
+		this.usuario = usuario;
 		setComponentes();
 		setBotones();
 	}
@@ -29,20 +39,27 @@ public class EditarFrame extends JDialog {
 	private void setBotones() {
 		
 		editarBtn = new JButton("Editar");
-		editarBtn.setBounds(173, 350, 117, 25);
+		editarBtn.setBounds(124, 389, 117, 25);
 		contentPane.add(editarBtn);
 		editarBtn.addActionListener(e->setModoEditar());
 		
 		cancelarBtn = new JButton("Cancelar");
-		cancelarBtn.setBounds(381, 350, 117, 25);
+		cancelarBtn.setBounds(382, 389, 117, 25);
 		cancelarBtn.addActionListener(e -> this.dispose());
 		contentPane.add(cancelarBtn);
+		
+		guardarBtn = new JButton("Guardar");
+		guardarBtn.setEnabled(false);
+		guardarBtn.setBounds(253, 389, 117, 25);
+		contentPane.add(guardarBtn);
+		guardarBtn.addActionListener(e->setModoGuardar());
 	}
 
 	private void setComponentes() {
 		setTitle("Perfil");
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 450);
+		setBounds(100, 100, 700, 476);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -53,65 +70,115 @@ public class EditarFrame extends JDialog {
 		contentPane.add(nombreTextField);
 		// nombreTextField.addKeyListener(e->);
 		nombreTextField.setColumns(10);
+		nombreTextField.setEnabled(false);
 
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setBounds(70, 29, 70, 15);
 		contentPane.add(lblNombre);
 
-		JLabel lblNewLabel = new JLabel("Apellido");
-		lblNewLabel.setBounds(70, 82, 70, 15);
-		contentPane.add(lblNewLabel);
+		JLabel lblApellido = new JLabel("Apellido");
+		lblApellido.setBounds(70, 82, 70, 15);
+		contentPane.add(lblApellido);
 
-		ApellidoTextField = new JTextFieldAlfabetico();
-		ApellidoTextField.setBounds(69, 101, 271, 19);
-		contentPane.add(ApellidoTextField);
-		ApellidoTextField.setColumns(10);
+		apellidoTextField = new JTextFieldAlfabetico();
+		apellidoTextField.setBounds(69, 101, 271, 19);
+		contentPane.add(apellidoTextField);
+		apellidoTextField.setColumns(10);
+		apellidoTextField.setEnabled(false);
 
-		JLabel lblUsuario = new JLabel("Email");
-		lblUsuario.setBounds(70, 138, 70, 15);
-		contentPane.add(lblUsuario);
+		JLabel lblEmail = new JLabel("Email");
+		lblEmail.setBounds(70, 138, 70, 15);
+		contentPane.add(lblEmail);
 
 		emailtextField = new JTextFieldAlfabetico();
 		emailtextField.setBounds(70, 159, 270, 19);
 		contentPane.add(emailtextField);
 		emailtextField.setColumns(10);
+		emailtextField.setEnabled(false);
 
-		JLabel lblContrasea = new JLabel("Usuario");
-		lblContrasea.setBounds(70, 197, 101, 15);
-		contentPane.add(lblContrasea);
+		JLabel lblUsuario = new JLabel("Usuario");
+		lblUsuario.setBounds(70, 197, 101, 15);
+		contentPane.add(lblUsuario);
 
 		usuarioTextField = new JTextFieldAlfabetico();
 		usuarioTextField.setBounds(70, 215, 270, 19);
 		contentPane.add(usuarioTextField);
 		usuarioTextField.setColumns(10);
+		usuarioTextField.setEnabled(false);
 
-		JLabel lblEmail = new JLabel("Contrase\u00f1a");
-		lblEmail.setBounds(70, 257, 101, 15);
-		contentPane.add(lblEmail);
+		lblContraseniaAnt = new JLabel("Ingrese contraseña anterior");
+		lblContraseniaAnt.setBounds(70, 257, 171, 15);
+		contentPane.add(lblContraseniaAnt);
+		lblContraseniaAnt.setVisible(false);
 
-		contraseniaTextField = new JTextField();
-		contraseniaTextField.setBounds(70, 278, 270, 19);
-		contentPane.add(contraseniaTextField);
-		contraseniaTextField.setColumns(10);
+		contraseniaAntTextField = new JPasswordField();
+		contraseniaAntTextField.setBounds(70, 278, 270, 19);
+		contentPane.add(contraseniaAntTextField);
+		contraseniaAntTextField.setColumns(10);
+		contraseniaAntTextField.setVisible(false);
+		
+		lblContraseniaNueva = new JLabel("Ingrese nueva contraseña");
+		lblContraseniaNueva.setBounds(70, 310, 171, 15);
+		contentPane.add(lblContraseniaNueva);
+		lblContraseniaNueva.setVisible(false);
+		
+		contraseniaNuevatextField = new JPasswordField();
+		contraseniaNuevatextField.setColumns(10);
+		contraseniaNuevatextField.setBounds(70, 338, 270, 19);
+		contentPane.add(contraseniaNuevatextField);
+		contraseniaNuevatextField.setVisible(false);
+		
+		setearDatosUsuario();
+	}
+	
+	private void setearDatosUsuario() {
+		nombreTextField.setText(usuario.getNombre());
+		apellidoTextField.setText(usuario.getApellido());
+		emailtextField.setText(usuario.getEmail());
+		usuarioTextField.setText(usuario.getAlias());
 	}
 	
 	private void setModoEditar() {
-		contentPane.remove(editarBtn);
-		guardarBtn = new JButton("Guardar");
-		guardarBtn.setBounds(173, 350, 117, 25);
-		guardarBtn.addActionListener(e->actualizarDatos());
-		contentPane.add(guardarBtn);
+		editarBtn.setEnabled(false);
+		guardarBtn.setEnabled(true);
+		habilitaDeshabilitaControles(true);
 	}
-
-	private void actualizarDatos() {
+	
+	private void setModoGuardar() {
 		if(validarDatos()) {
-			this.dispose();
-		}else {
+			if(contraseniaAntTextField.getText().equals(usuario.getContrasenia())) {
+				DAUsuario usuarioDB = new DAUsuario();
+				Usuario usuarioActualizado = new Usuario(usuario.getAlias(), nombreTextField.getText(), apellidoTextField.getText(),
+						emailtextField.getText(), contraseniaNuevatextField.getText());
+				usuarioActualizado.setId(usuario.getId());
+				usuarioDB.actualizarUsuario(usuarioActualizado);
+				JOptionPane.showMessageDialog(this, "Los datos se actualizaron correctamente.");
+				usuario = usuarioActualizado;
+				pFrame.setUsuario(usuarioActualizado);
+				habilitaDeshabilitaControles(false);
+				guardarBtn.setEnabled(false);
+				editarBtn.setEnabled(true);
+				this.dispose();
+			} else {
+				JOptionPane.showMessageDialog(this, "La contraseña ingresada es incorrecta.");
+			}
+		} else {
 			JOptionPane.showMessageDialog(this, "Faltan completar datos.");
 		}
 	}
+	
+	private void habilitaDeshabilitaControles(boolean habilitar) {
+		lblContraseniaAnt.setVisible(habilitar);
+		contraseniaAntTextField.setVisible(habilitar);
+		lblContraseniaNueva.setVisible(habilitar);
+		contraseniaNuevatextField.setVisible(habilitar);
+		nombreTextField.setEnabled(habilitar);
+		apellidoTextField.setEnabled(habilitar);
+		emailtextField.setEnabled(habilitar);
+	}
 
 	private boolean validarDatos() {
-		return true;
+		return (!(nombreTextField.getText().isEmpty() || apellidoTextField.getText().isEmpty() || emailtextField.getText().isEmpty() ||
+				contraseniaAntTextField.getText().isEmpty() || contraseniaNuevatextField.getText().isEmpty()));
 	}
 }
