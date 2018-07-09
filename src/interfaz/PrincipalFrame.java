@@ -7,15 +7,15 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import modelos.Sala;
+import modelos.Usuario;
 
 public class PrincipalFrame extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField nombreUsuarioTextField;
+	private JLabel nombreUsuarioTextField;
 	private JButton btnPerfil;
 	private JButton iniciarConversacionBtn;
 	private JButton crearSalaBtn;
@@ -23,19 +23,34 @@ public class PrincipalFrame extends JDialog {
 	private final static String COLUMN_SALA = "Sala";
 	private final static String COLUMN_NOMBRE = "Nombre";
 	private final static String COLUMN_TOPICO = "Tópico";
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 	private final static String COLUMN_BOTON = "Botón";
+	private Usuario usuario;
 	
 	DefaultTableModel tableModel;
 	private String[] columnNames = {COLUMN_SALA,COLUMN_NOMBRE,COLUMN_TOPICO,COLUMN_BOTON};
 	
-	public PrincipalFrame() {
+	public PrincipalFrame(Usuario usuario) {
+		this.usuario = usuario;
+		setComponentes();
+	}
+	
+	private void setComponentes() {
 		setBounds(100, 100, 700, 450);
 		getContentPane().setLayout(null);
+		setResizable(false);
 
-		nombreUsuarioTextField = new JTextField();
+		nombreUsuarioTextField = new JLabel();
 		nombreUsuarioTextField.setBounds(33, 28, 114, 19);
 		getContentPane().add(nombreUsuarioTextField);
-		nombreUsuarioTextField.setColumns(10);
+		nombreUsuarioTextField.setText(usuario.getAlias());
 
 		btnPerfil = new JButton("Perfil");
 		btnPerfil.setBounds(571, 25, 80, 25);
@@ -81,6 +96,9 @@ public class PrincipalFrame extends JDialog {
 		table.setBounds(33, 120, 629, 158);
 		table.getColumnModel().getColumn(3).setCellRenderer(new SalaTableButtonRenderer());
 		table.getColumnModel().getColumn(3).setCellEditor(new SalaTableRenderer(new JCheckBox()));
+		table.getColumnModel().getColumn(3).setWidth(70);
+		table.getColumnModel().getColumn(3).setMinWidth(70);
+		table.getColumnModel().getColumn(3).setMaxWidth(70);
 		table.getColumnModel().getColumn(0).setWidth(0);
 		table.getColumnModel().getColumn(0).setMinWidth(0);
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -96,7 +114,8 @@ public class PrincipalFrame extends JDialog {
 	}
 
 	private void abrirPerfilFrame() {
-		EditarFrame editar = new EditarFrame();
+		EditarFrame editar = new EditarFrame(this, usuario);
+		editar.setModal(true);
 		editar.setVisible(true);
 	}
 }
