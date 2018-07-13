@@ -11,27 +11,38 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
-import interfaz.LoginFrame;
+import javax.swing.JOptionPane;
 
 public class Cliente implements Observer {
 	
 	private List<Thread> listaThreads = new LinkedList<>();
 	private Socket socketCliente;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
 	private String ip;
 	private int puerto;
+	
 	@SuppressWarnings("unused")
-	private LoginFrame login;//ClienteLoginGUI login;
+//	private LoginFrame login;
+	private ClienteLoginGUI login;
 	private ClienteGUI chat;
 	private boolean mensajesALeer;
-	private String usuario;
+	private boolean abrirChat;
+	//private String usuario;
 	@SuppressWarnings("unused")
-	private String password;
+	//private String password;
+	Credencial credenciales;
+	
 	
 	public Cliente(String ip, int puerto) {
 		this.ip = ip;
 		this.puerto = puerto;
 		this.mensajesALeer = false;
-		this.login = new LoginFrame(this);//new ClienteLoginGUI(this);
+//		this.login = new LoginFrame(this);
+		this.login = new ClienteLoginGUI(this);
+		this.abrirChat = false;
+		Thread hiloCliente = new Thread(this.new Conectar(this));
+		hiloCliente.start();
 	}
 	
 	public void notificar() {
@@ -42,9 +53,9 @@ public class Cliente implements Observer {
 		return this.mensajesALeer;
 	}
 	
-	public String getUsuario() {
+	/*public String getUsuario() {
 		return this.usuario;
-	}
+	}*/
 
 	private void Salir() {
 		for(Thread t : listaThreads) 
@@ -55,27 +66,54 @@ public class Cliente implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		String[] datos = ((String)arg1).split(" ");
 		//System.out.println(datos[0] + " - " + datos[1]);
-		this.usuario = datos[0];
-		this.password = datos[1];
+		//this.usuario = datos[0];
+		//this.password = datos[1];
+		credenciales = new Credencial(datos[0], datos[1]);
+		if (!validarCredenciales(credenciales)) {
+			JOptionPane.showMessageDialog(null, "Credenciales invalidas");
+		} else {
+			login.setVisible(false);
+			abrirChat = true;
+		}
 		
-		this.chat = new ClienteGUI(this, this.usuario);
+		//this.chat = new ClienteGUI(this, this.usuario);
 		
 		/** Conecto los clientes al servidor **/
-		Thread hiloCliente = new Thread(this.new Conectar());
-		hiloCliente.start();
+		//Thread hiloCliente = new Thread(this.new Conectar());
+		//hiloCliente.start();
 	}
-		
+	
+	public boolean validarCredenciales(Credencial credenciales) {
+		try {
+			out = new ObjectOutputStream(socketCliente.getOutputStream());
+			out.writeObject(credenciales);
+			in = new ObjectInputStream(socketCliente.getInputStream());
+			return (Boolean) in.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			return false;
+		}
+	}
+	
 	public class Conectar implements Runnable {
-
+		
+		Cliente motor;
+		
+		public Conectar(Cliente motor) {
+			this.motor = motor;
+		}
+		
 		@Override
 		public void run() {
 			try {
 				//System.out.println("Cliente creado");
 				//Me conecto al cliente, usando el localhost:puertoSV
 				socketCliente = new Socket(ip, puerto);
+				//in = new ObjectInputStream(socketCliente.getInputStream());
+				//out = new ObjectOutputStream(socketCliente.getOutputStream());
+				
 				
 				//En cada cliente creo e inicio un thread para escribir al sv
-				Escribir esc = new Escribir(socketCliente, usuario);
+				Escribir esc = new Escribir(socketCliente, credenciales.getUser());
 				Thread esc_thread = new Thread(esc);
 				listaThreads.add(esc_thread);
 				esc_thread.start();
@@ -85,7 +123,14 @@ public class Cliente implements Observer {
 				Thread leer_thread = new Thread(leer);
 				listaThreads.add(leer_thread);
 				leer_thread.start();
-			} catch(IOException e) {
+				
+				login.setVisible(true);
+				while(!abrirChat) {
+					Thread.sleep(100);
+				}
+				chat = new ClienteGUI(motor, credenciales.getUser());
+				
+			} catch(IOException | InterruptedException e) {
 				chat.imprimir("Error al conectar al servidor y/o inicializar los threads");
 			}
 		}
@@ -93,12 +138,12 @@ public class Cliente implements Observer {
 	
 	public class Leer implements Runnable {
 
-		private ObjectInputStream in;
+		
 		private String msj;
 		
 		Leer(Socket socketCliente) throws IOException {
 			//Inicializo el flujo de entrada del socket
-			in = new ObjectInputStream(socketCliente.getInputStream());
+			
 		}
 		
 		@Override
@@ -122,13 +167,13 @@ public class Cliente implements Observer {
 
 	public class Escribir implements Runnable {
 
-		private ObjectOutputStream out;
+		
 		private String usuario;
 		//private Scanner teclado;
 		
 		Escribir(Socket socketCliente, String usuario) throws IOException {
 			//Inicializo el flujo de salida del socket
-			out = new ObjectOutputStream(socketCliente.getOutputStream());
+			
 			this.usuario = usuario;
 		}
 		

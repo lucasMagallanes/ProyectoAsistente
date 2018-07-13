@@ -48,7 +48,7 @@ public class ClienteLoginGUI extends Observable {
 	 */
 	private void initialize() {
 		
-		frame = new JFrame("Iniciar sesión");
+		frame = new JFrame("Iniciar sesiï¿½n");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -84,14 +84,21 @@ public class ClienteLoginGUI extends Observable {
 				if(!usr.equals("") && !pass.equals("")) {
 					setChanged();
 					notifyObservers(usr + " " + String.valueOf(pass));
-					frame.dispose();
+					//frame.dispose();
 				} else 
-					JOptionPane.showMessageDialog(frame, "Uno de los campos se encuentra vacío", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(frame, "Uno de los campos se encuentra vacï¿½o", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		btnConectar.setBounds(160, 187, 97, 25);
 		frame.getContentPane().add(btnConectar);
 		
 		frame.setVisible(true);
+	}
+	
+	public void setVisible(boolean visible) {
+		if(visible)
+			frame.setVisible(visible);
+		else
+			frame.dispose();
 	}
 }

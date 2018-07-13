@@ -24,10 +24,24 @@ public class Sala {
 		this.nombre = nombre;
 		this.topico = topico;
 	}
+	
+	
+
+	public int getId() {
+		return id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getTopico() {
+		return topico;
+	}
 
 	@Override
 	public String toString() {
-		return "Sala [id=" + id + ",Administrador=" + administrador.getAlias() + ", nombre=" + nombre + ", topico=" + topico + ", usuarios=" + usuarios + "]";
+		return "Sala [id=" + id + ",Administrador= admin" + ", nombre=" + nombre + ", topico=" + topico + ", usuarios=" + usuarios + "]";
 	}
 	
 }
