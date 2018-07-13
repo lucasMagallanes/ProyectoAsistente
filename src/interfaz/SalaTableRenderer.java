@@ -13,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 
 import modelos.Sala;
+import modelos.Usuario;
 
 public class SalaTableRenderer extends DefaultCellEditor {
 	private static final long serialVersionUID = 1L;
@@ -21,9 +22,11 @@ public class SalaTableRenderer extends DefaultCellEditor {
 	private boolean clicked;
 	private int row, col;
 	private JTable table;
+	private PrincipalFrame miPF;
 
-	public SalaTableRenderer(JCheckBox checkBox) {
+	public SalaTableRenderer(JCheckBox checkBox, PrincipalFrame pf) {
 		super(checkBox);
+		this.miPF = pf;
 		button = new JButton();
 		button.setOpaque(true);
 		button.addActionListener(new ActionListener() {
@@ -48,8 +51,10 @@ public class SalaTableRenderer extends DefaultCellEditor {
 
 	public Object getCellEditorValue() {
 		if (clicked) {
-			Sala salaSeleccionada = (Sala) table.getValueAt(row, 0);
-			JOptionPane.showMessageDialog(button, "Click en Sala: "+ salaSeleccionada.toString() );
+//			Sala salaSeleccionada = (Sala) table.getValueAt(row, 0);
+//			JOptionPane.showMessageDialog(button, "Click en Sala: "+ salaSeleccionada.toString() );
+			System.out.println(table.getValueAt(row, 0));
+			this.miPF.clik((int)table.getValueAt(row, 0));
 		}
 		clicked = false;
 		return new String(label);

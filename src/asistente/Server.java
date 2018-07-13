@@ -13,10 +13,13 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 public class Server implements Observer {
 
 	private List<Thread> listaThreads = new LinkedList<>();
 	private HashMap<Socket,ObjectOutputStream> listaClientes;	//Lista de sockets de los clientes
+	private HashMap<String, String> usuariosContrasenias;
 	private ServerSocket listener;	//Socket del sv para escuchar a los nuevos clientes
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -24,6 +27,12 @@ public class Server implements Observer {
 	
 	public Server(int puerto) throws IOException {
 		this.listaClientes = new HashMap<Socket,ObjectOutputStream>();
+		this.usuariosContrasenias = new HashMap<String,String>();
+		Scanner sc = new Scanner(new File("usuarios\\usuarios.in"));
+		while(sc.hasNextLine()) {
+			String datos[] = sc.nextLine().split(" ");
+			usuariosContrasenias.put(datos[0], datos[1]);
+		}
 		this.listener = new ServerSocket(puerto);
 		this.gui = new ServerGUI(this);
 	}
@@ -67,6 +76,17 @@ public class Server implements Observer {
 					gui.imprimirEvento("Conexion de " + socketCliente.getInetAddress() + ":" + socketCliente.getPort());
 					in = new ObjectInputStream(socketCliente.getInputStream());	//Inicializo flujo para leer data del cliente
 					out = new ObjectOutputStream(socketCliente.getOutputStream());	//Inicializo flujo para escribir data al cliente
+					
+					boolean credencialesValidas = false;
+					while(!credencialesValidas) {
+						Credencial credencialesCliente = (Credencial) in.readObject();
+						gui.imprimirEvento(credencialesCliente.getUser() + " " + credencialesCliente.getPassword());
+						if(usuariosContrasenias.get(credencialesCliente.getUser()) == null)
+							out.writeObject(new Boolean(false));
+						else
+							out.writeObject(new Boolean(true));
+					}
+					
 					listaClientes.put(socketCliente, out);	//Al cliente aceptado lo agrego en el hashmap
 					
 					//Thread para leer al cliente (uno por cada cliente)
@@ -75,7 +95,7 @@ public class Server implements Observer {
 					listaThreads.add(leer);
 					leer.start();
 				}
-			} catch (IOException e) {
+			} catch (IOException | ClassNotFoundException e) {
 				gui.imprimirEvento(e.getMessage());
 			}
 		}
