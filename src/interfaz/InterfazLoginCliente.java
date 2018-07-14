@@ -114,9 +114,8 @@ public class InterfazLoginCliente {
 				System.out.println(cliente.estado);
 				if(cliente.estado == Cliente.LOGGEADO) {
 					InterfazSalas principal = new InterfazSalas();
-					
+					frame.dispose();
 					JOptionPane.showMessageDialog(null, "Conectado al servidor", "", JOptionPane.INFORMATION_MESSAGE);
-					textFieldUsuario.setText("si");
 				}else if(cliente.estado == Cliente.USUARIO_EN_USO) {
 					JOptionPane.showMessageDialog(null, "El usuario ya está en uso.", "", JOptionPane.INFORMATION_MESSAGE);
 				}
