@@ -35,7 +35,7 @@ public class InterfazSalas extends Thread {
 	private Cliente cliente;
 	private String nombreUsuario;
 	private HashMap<String, InterfazChat> ventanasAbiertas;
-
+	private JList<String> jlUsuariosConectados;
 	/**
 	 * Launch the application.
 	 */
@@ -95,7 +95,7 @@ public class InterfazSalas extends Thread {
 		mensajesPrivados.setBounds(222, 52, 519, 366);
 		frame.getContentPane().add(mensajesPrivados);
 
-		JList<String> jlUsuariosConectados = new JList<String>(usuariosConectados);
+		jlUsuariosConectados = new JList<String>(usuariosConectados);
 		jlUsuariosConectados.setBounds(753, 52, 180, 414);
 		frame.getContentPane().add(jlUsuariosConectados);
 
@@ -191,6 +191,8 @@ public class InterfazSalas extends Thread {
 				}
 			}
 			usuariosConectados.removeElement(nombreUsuario);
+			
+			jlUsuariosConectados = new JList<String>(usuariosConectados);
 
 			verMensajesPrivados(cliente.getMensajesPrivados());
 
