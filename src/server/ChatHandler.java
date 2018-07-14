@@ -39,7 +39,6 @@ public class ChatHandler extends Thread {
 	public void run() {
 		while (conectado) {
 			try {
-				
 				Mensaje msg = new Mensaje(in.readUTF());
 				procesar(msg);
 			} catch (IOException e) {
@@ -91,7 +90,7 @@ public class ChatHandler extends Thread {
 			if( usuarioEntrante.equals(usuarioRegistrado)) {
 				Mensaje a = new Mensaje();
 				a.setContenido("usuario esta en uso");// usuario ya existe
-				a.setTipo(7);
+				a.setTipo(Mensaje.USUARIO_EN_USO);
 				this.enviar(a);
 			}
 		}
