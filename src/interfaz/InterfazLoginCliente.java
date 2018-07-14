@@ -103,8 +103,9 @@ public class InterfazLoginCliente {
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Mensaje msj = new Mensaje();
-				msj.setOrigen(textFieldUsuario.getText());
-				msj.setContenido(textFieldUsuario.getText());
+				String nombreUsuario=textFieldUsuario.getText();
+				msj.setOrigen(nombreUsuario);
+				msj.setContenido(nombreUsuario);
 				cliente.enviar(msj);
 				try {
 					Thread.sleep(2000);
@@ -112,7 +113,7 @@ public class InterfazLoginCliente {
 				}
 				System.out.println("Cliente estado:" + cliente.estado);
 				if(cliente.estado == Cliente.LOGGEADO) {
-					InterfazSalas principal = new InterfazSalas(cliente);
+					InterfazSalas principal = new InterfazSalas(cliente, nombreUsuario);
 					principal.start();
 					frame.dispose();
 					JOptionPane.showMessageDialog(null, "Conectado al servidor", "", JOptionPane.INFORMATION_MESSAGE);

@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class Cliente extends Thread {
 	public HashMap<Integer, Sala> salas;
 	public List<String> usuarios;
 	public int estado;
+	
+	private HashMap<String, List<String>> mensajesPrivados;
 
 	public Cliente(String host, int puerto) throws UnknownHostException, IOException {		
 		this.cliente = new Socket(host, puerto);
@@ -36,6 +39,7 @@ public class Cliente extends Thread {
 		usuarios = new LinkedList<String>();
 		salas = new HashMap<Integer, Sala>();
 		this.estado = ESPERANDO_LOGIN;
+		this.mensajesPrivados = new HashMap<String, List<String>>();
 	}
 
 	// Escucha mensajes del servidor
@@ -108,8 +112,25 @@ public class Cliente extends Thread {
 	}
 
 	private void mensajePrivado(Mensaje msg) {
-		// Imprimir en la ventana el mensaje recibido
+		String usuarioEmisor=msg.getOrigen();
+		List<String> mensajes;
 		
+		if(mensajesPrivados.containsKey(usuarioEmisor)) {
+			 mensajes = mensajesPrivados.get(usuarioEmisor);
+			mensajes.add(msg.getContenido());
+		} else {
+			mensajesPrivados.put(usuarioEmisor, new ArrayList<String>());
+			mensajes = mensajesPrivados.get(usuarioEmisor);
+			mensajes.add(msg.getContenido());
+		}
+	}
+	
+	public HashMap<String, List<String>> getMensajesPrivados(){
+		return mensajesPrivados;
+	}
+	
+	public void limpiarMensajesPrivados() {
+		this.mensajesPrivados = new HashMap<String, List<String>>();
 	}
 
 	private void desconectar(Mensaje msg) {

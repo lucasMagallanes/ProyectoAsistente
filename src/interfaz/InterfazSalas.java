@@ -9,6 +9,12 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -27,6 +33,8 @@ public class InterfazSalas extends Thread {
 	private DefaultListModel<String> salas;
 	private DefaultListModel<String> usuariosConectados;
 	private Cliente cliente;
+	private String nombreUsuario;
+	private HashMap<String, InterfazChat> ventanasAbiertas;
 
 	/**
 	 * Launch the application.
@@ -35,7 +43,7 @@ public class InterfazSalas extends Thread {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InterfazSalas window = new InterfazSalas(null);
+					InterfazSalas window = new InterfazSalas(null, "");
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,8 +55,10 @@ public class InterfazSalas extends Thread {
 	/**
 	 * Create the application.
 	 */
-	public InterfazSalas(Cliente cliente) {
+	public InterfazSalas(Cliente cliente, String nombreUsuario) {
 		this.cliente = cliente;
+		this.nombreUsuario = nombreUsuario;
+		this.ventanasAbiertas = new HashMap<String, InterfazChat>();
 		initialize();
 	}
 
@@ -61,14 +71,15 @@ public class InterfazSalas extends Thread {
 		frame.setBounds(100, 100, 963, 555);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		salas = new DefaultListModel<String>();
 
 		JList<String> listaSalas = new JList<>(salas);
 		listaSalas.setBounds(10, 52, 200, 376);
 		frame.getContentPane().add(listaSalas);
+		
 		usuariosConectados = new DefaultListModel<String>();
-
+		
 		JButton btnAbrirSala = new JButton("Abrir");
 		btnAbrirSala.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -84,9 +95,9 @@ public class InterfazSalas extends Thread {
 		mensajesPrivados.setBounds(222, 52, 519, 366);
 		frame.getContentPane().add(mensajesPrivados);
 
-		JList<String> listaUsuarios = new JList<String>(usuariosConectados);
-		listaUsuarios.setBounds(753, 52, 180, 414);
-		frame.getContentPane().add(listaUsuarios);
+		JList<String> jlUsuariosConectados = new JList<String>(usuariosConectados);
+		jlUsuariosConectados.setBounds(753, 52, 180, 414);
+		frame.getContentPane().add(jlUsuariosConectados);
 
 		mensajePrivado = new JTextField();
 		mensajePrivado.setBounds(222, 429, 410, 37);
@@ -108,7 +119,7 @@ public class InterfazSalas extends Thread {
 		JButton btnEnviar = new JButton("Enviar");
 		btnEnviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int usuario = listaUsuarios.getSelectedIndex() + 1;
+				int usuario = jlUsuariosConectados.getSelectedIndex() + 1;
 				if (usuario > 0) {
 					JOptionPane.showMessageDialog(null, mensajePrivado.getText() + " al Usuario " + usuario);
 				}
@@ -140,6 +151,20 @@ public class InterfazSalas extends Thread {
 				// textTopico.getText() );
 			}
 		});
+
+		jlUsuariosConectados.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evt) {
+				JList<String> list = (JList) evt.getSource();
+				String usuarioSeleccionado = list.getSelectedValue().toString();
+				
+				if(!estaVentanaAbierta(usuarioSeleccionado)) {
+					InterfazChat ic = new InterfazChat(usuarioSeleccionado, nombreUsuario, cliente);
+					ventanasAbiertas.put(usuarioSeleccionado, ic);
+				}
+					
+				//JOptionPane.showMessageDialog(null, usuarioSeleccionado, "", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		btnCrear.setBounds(222, 479, 97, 25);
 		frame.getContentPane().add(btnCrear);
 
@@ -165,11 +190,38 @@ public class InterfazSalas extends Thread {
 					usuariosConectados.addElement(usuario);
 				}
 			}
+			usuariosConectados.removeElement(nombreUsuario);
+
+			verMensajesPrivados(cliente.getMensajesPrivados());
 
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 			}
 		}
+	}
+
+	private void verMensajesPrivados(HashMap<String, List<String>> mensajesPrivados) {
+		for (Map.Entry<String, List<String>> entry : mensajesPrivados.entrySet()) {
+			String usuarioEmisor = entry.getKey();
+			
+
+			if (!estaVentanaAbierta(usuarioEmisor)) {
+				InterfazChat ic = new InterfazChat(usuarioEmisor,nombreUsuario, cliente);
+				ventanasAbiertas.put(entry.getKey(), ic);
+			}
+			
+			InterfazChat ic = ventanasAbiertas.get(usuarioEmisor);
+			List<String> mensajes = entry.getValue();
+			
+			for(String msg : mensajes)
+				ic.recibirMensaje(msg);
+		}
+
+		cliente.limpiarMensajesPrivados();
+	}
+	
+	private boolean estaVentanaAbierta(String usuario) {
+		return ventanasAbiertas.containsKey(usuario);
 	}
 }
