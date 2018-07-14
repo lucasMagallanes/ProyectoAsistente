@@ -24,7 +24,7 @@ public class ChatHandler extends Thread {
 	private int estado = ESPERANDO_LOGIN;
 	public static HashMap<String, ChatHandler> clientes;
 	public static HashMap<Integer, Sala> salas;
-	public static int numSala;
+	public static int numSala = 0;
 	private boolean conectado = true;
 
 	public ChatHandler(Socket cliente) throws IOException {
@@ -79,7 +79,7 @@ public class ChatHandler extends Thread {
 	private void actualizarSalas() {
 		String contenido = "";
 		for (int salaID : salas.keySet()) {
-			contenido += salaID + "," + salas.get(salaID) + "\n";
+			contenido += salaID + "&" + salas.get(salaID).getTopico() + ",";
 		}
 		Mensaje msg = new Mensaje(contenido, Mensaje.ACTUALIZAR_SALAS);
 		broadcast(msg);
@@ -101,6 +101,7 @@ public class ChatHandler extends Thread {
 		clientes.put(usuarioEntrante, this);
 		this.usuario = usuarioEntrante;
 		actualizarUsuarios();
+		actualizarSalas();
 	}
 
 	private void actualizarUsuarios() {

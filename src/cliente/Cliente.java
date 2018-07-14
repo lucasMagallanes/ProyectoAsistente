@@ -79,7 +79,7 @@ public class Cliente extends Thread {
 				actualizarUsuarios(msg);
 				break;
 			case Mensaje.ACTUALIZAR_SALAS:
-				actualizarSalas();
+				actualizarSalas(msg);
 				break;
 			default:
 				break;
@@ -87,9 +87,17 @@ public class Cliente extends Thread {
 		}
 	}
 
-	private void actualizarSalas() {
-		// Actualizar en la ventana las salas disponibles
-		
+	private void actualizarSalas(Mensaje msg) {
+		salas = new HashMap<Integer, Sala>();
+		String[] salasMensaje = msg.getContenido().split(",");
+		String[] sala;
+		for (String salaMensaje : salasMensaje) {
+			if(!salaMensaje.isEmpty()) {
+				sala = salaMensaje.split("&"); 
+				salas.put(Integer.parseInt(sala[0]), new Sala(Integer.parseInt(sala[0]), sala[1]));	
+			}
+		}
+		// Actualizar en la ventana las salas disponibles	
 	}
 
 	private void actualizarUsuarios(Mensaje msg) {
