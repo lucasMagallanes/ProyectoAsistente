@@ -18,6 +18,7 @@ import server.Mensaje;
 public class Cliente extends Thread {
 	public static final int ESPERANDO_LOGIN = 0;
 	public static final int LOGGEADO = 1;
+	public static final int USUARIO_EN_USO = 2;
 	
 	boolean escuchando = true; 
 	private Socket cliente;
@@ -121,8 +122,8 @@ public class Cliente extends Thread {
 
 	private void login(Mensaje msg) {
 		System.out.println("en login");
-		if (msg.getContenido().equals("usuario en uso")) {
-		// Informar al usuario que ya está en uso
+		if (msg.getTipo() == 7) {
+			this.estado = USUARIO_EN_USO;
 		}
 		else {
 			this.usuario = msg.getContenido();

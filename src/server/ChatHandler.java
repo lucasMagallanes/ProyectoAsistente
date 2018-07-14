@@ -86,17 +86,20 @@ public class ChatHandler extends Thread {
 	}
 
 	private void login(Mensaje msg) {
-		String usuario = msg.getOrigen();
+		String usuarioEntrante = msg.getOrigen();
 		for (String usuarioRegistrado : clientes.keySet()) {
 			if( usuario.equals(usuarioRegistrado)) {
-				return; // usuario ya existe
+				Mensaje a = new Mensaje();
+				a.setContenido("usuario esta en uso");// usuario ya existe
+				a.setTipo(Mensaje.USUARIO_EN_USO);
+				this.enviar(a);
 			}
 		}
 		System.out.println("Usuario valido");
 		enviar(msg);
 		estado = LOGGEADO;
-		clientes.put(usuario, this);
-		this.usuario = usuario;
+		clientes.put(usuarioEntrante, this);
+		this.usuario = usuarioEntrante;
 		actualizarUsuarios();
 	}
 
