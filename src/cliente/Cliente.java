@@ -27,7 +27,7 @@ public class Cliente extends Thread {
 	private String usuario;
 	public HashMap<Integer, Sala> salas;
 	public List<String> usuarios;
-	public int estado = ESPERANDO_LOGIN;
+	public int estado;
 
 	public Cliente(String host, int puerto) throws UnknownHostException, IOException {		
 		this.cliente = new Socket(host, puerto);
@@ -35,6 +35,7 @@ public class Cliente extends Thread {
 		this.out = new DataOutputStream(new BufferedOutputStream(this.cliente.getOutputStream()));
 		usuarios = new LinkedList<String>();
 		salas = new HashMap<Integer, Sala>();
+		this.estado = ESPERANDO_LOGIN;
 	}
 
 	// Escucha mensajes del servidor
