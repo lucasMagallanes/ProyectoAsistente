@@ -101,6 +101,7 @@ public class InterfazLoginCliente {
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Mensaje msj = new Mensaje();
+				msj.setOrigen(textFieldUsuario.getText());
 				msj.setContenido(textFieldUsuario.getText());
 				cliente.enviar(msj);
 				try {
@@ -112,6 +113,8 @@ public class InterfazLoginCliente {
 					InterfazSalas principal = new InterfazSalas();
 					JOptionPane.showMessageDialog(null, "Conectado al servidor", "", JOptionPane.INFORMATION_MESSAGE);
 					textFieldUsuario.setText("si");
+				}else if(cliente.estado == Cliente.USUARIO_EN_USO) {
+					JOptionPane.showMessageDialog(null, "El usuario ya está en uso.", "", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
