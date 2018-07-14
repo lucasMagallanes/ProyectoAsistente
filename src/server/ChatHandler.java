@@ -88,7 +88,7 @@ public class ChatHandler extends Thread {
 	private void login(Mensaje msg) {
 		String usuarioEntrante = msg.getOrigen();
 		for (String usuarioRegistrado : clientes.keySet()) {
-			if( usuario.equals(usuarioRegistrado)) {
+			if( usuarioEntrante.equals(usuarioRegistrado)) {
 				Mensaje a = new Mensaje();
 				a.setContenido("usuario esta en uso");// usuario ya existe
 				a.setTipo(Mensaje.USUARIO_EN_USO);

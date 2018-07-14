@@ -110,15 +110,14 @@ public class InterfazLoginCliente {
 					Thread.sleep(2000);
 				} catch (InterruptedException e1) { 
 				}
-				System.out.println(cliente.estado);
+				System.out.println("Cliente estado:" + cliente.estado);
 				if(cliente.estado == Cliente.LOGGEADO) {
 					InterfazSalas principal = new InterfazSalas(cliente);
 					principal.start();
 					frame.dispose();
 					JOptionPane.showMessageDialog(null, "Conectado al servidor", "", JOptionPane.INFORMATION_MESSAGE);
-					else if(cliente.estado == Cliente.USUARIO_EN_USO) {
+				}else if(cliente.estado == Cliente.USUARIO_EN_USO) {
 						JOptionPane.showMessageDialog(null, "El usuario ya está en uso.", "", JOptionPane.INFORMATION_MESSAGE);
-					}
 				}
 			}
 		});
