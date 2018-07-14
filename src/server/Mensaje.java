@@ -45,6 +45,13 @@ public class Mensaje {
 			this.destino = null;
 			this.sala = -1;
 		}
+//		if(tipo == NUEVA_SALA) {
+//			this.origen = "user";
+//			this.contenido = contenido;
+//			this.tipoMensaje = tipo;
+//			this.destino = null;
+//			this.sala = -1;
+//		}
 	};
 
 	private void copy(Mensaje mensaje) {
