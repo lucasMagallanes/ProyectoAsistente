@@ -90,9 +90,11 @@ public class ChatHandler extends Thread {
 		for (String usuarioRegistrado : clientes.keySet()) {
 			if( usuarioEntrante.equals(usuarioRegistrado)) {
 				Mensaje a = new Mensaje();
-				a.setContenido("usuario esta en uso");// usuario ya existe
+				a.setContenido("usuario esta en uso");
 				a.setTipo(Mensaje.USUARIO_EN_USO);
 				this.enviar(a);
+				estado = ESPERANDO_LOGIN;
+				return;
 			}
 		}
 		System.out.println("Usuario valido");

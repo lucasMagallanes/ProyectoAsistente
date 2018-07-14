@@ -119,6 +119,7 @@ public class InterfazLoginCliente {
 					JOptionPane.showMessageDialog(null, "Conectado al servidor", "", JOptionPane.INFORMATION_MESSAGE);
 				}else if(cliente.estado == Cliente.USUARIO_EN_USO) {
 						JOptionPane.showMessageDialog(null, "El usuario ya está en uso.", "", JOptionPane.INFORMATION_MESSAGE);
+						cliente.estado = Cliente.ESPERANDO_LOGIN;
 				}
 			}
 		});
