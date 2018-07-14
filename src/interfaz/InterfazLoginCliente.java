@@ -1,4 +1,4 @@
-package interfaz;
+	package interfaz;
 
 import java.awt.EventQueue;
 
@@ -72,7 +72,6 @@ public class InterfazLoginCliente {
 			public void actionPerformed(ActionEvent e) {
 				//CONECTAR AL SV Y APAGAR BOTON SI PUDE CONECTARME 
 				//HABILITO INICIAR SESION SI PUDE CONECTARME AL SV
-				
 				String ip = textFieldIP.getText();
 				try {
 					cliente = new Cliente(ip, 10001);
@@ -113,11 +112,13 @@ public class InterfazLoginCliente {
 				}
 				System.out.println(cliente.estado);
 				if(cliente.estado == Cliente.LOGGEADO) {
-					InterfazSalas principal = new InterfazSalas();
+					InterfazSalas principal = new InterfazSalas(cliente);
+					principal.start();
 					frame.dispose();
 					JOptionPane.showMessageDialog(null, "Conectado al servidor", "", JOptionPane.INFORMATION_MESSAGE);
-				}else if(cliente.estado == Cliente.USUARIO_EN_USO) {
-					JOptionPane.showMessageDialog(null, "El usuario ya est· en uso.", "", JOptionPane.INFORMATION_MESSAGE);
+					else if(cliente.estado == Cliente.USUARIO_EN_USO) {
+						JOptionPane.showMessageDialog(null, "El usuario ya est√° en uso.", "", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 			}
 		});

@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 
 import server.Mensaje;
 
@@ -26,14 +25,16 @@ public class Cliente extends Thread {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private String usuario;
-	private HashMap<Integer, Sala> salas;
-	private List<String> usuarios;
+	public HashMap<Integer, Sala> salas;
+	public List<String> usuarios;
 	public int estado = ESPERANDO_LOGIN;
 
 	public Cliente(String host, int puerto) throws UnknownHostException, IOException {		
 		this.cliente = new Socket(host, puerto);
 		this.in = new DataInputStream(new BufferedInputStream(this.cliente.getInputStream()));
 		this.out = new DataOutputStream(new BufferedOutputStream(this.cliente.getOutputStream()));
+		usuarios = new LinkedList<String>();
+		salas = new HashMap<Integer, Sala>();
 	}
 
 	// Escucha mensajes del servidor
@@ -121,7 +122,7 @@ public class Cliente extends Thread {
 
 	private void login(Mensaje msg) {
 		System.out.println("en login");
-		if (msg.getTipo() ==7) {
+		if (msg.getTipo() == 7) {
 			this.estado = USUARIO_EN_USO;
 		}
 		else {
@@ -149,5 +150,9 @@ public class Cliente extends Thread {
 			out.flush();
 		} catch (IOException e) {
 		}
+	}
+	
+	public String getUsuario() {
+		return this.usuario;
 	}
 }

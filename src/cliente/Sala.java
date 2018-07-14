@@ -18,4 +18,8 @@ public class Sala {
 	public void recibirMensaje(Mensaje msg) {
 		// Imprimir mensaje en el chat
 	}
+	
+	public String getTopico() {
+		return topico;
+	}
 }
