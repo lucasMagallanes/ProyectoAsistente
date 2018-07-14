@@ -72,13 +72,10 @@ public class InterfazLoginCliente {
 			public void actionPerformed(ActionEvent e) {
 				//CONECTAR AL SV Y APAGAR BOTON SI PUDE CONECTARME 
 				//HABILITO INICIAR SESION SI PUDE CONECTARME AL SV
-				
 				String ip = textFieldIP.getText();
 				try {
 					cliente = new Cliente(ip, 10001);
 					cliente.start();
-					btnConectar.setEnabled(false);
-					btnIniciarSesion.setEnabled(true);
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -104,7 +101,6 @@ public class InterfazLoginCliente {
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Mensaje msj = new Mensaje();
-				msj.setOrigen(textFieldUsuario.getText());
 				msj.setContenido(textFieldUsuario.getText());
 				cliente.enviar(msj);
 				try {
@@ -113,15 +109,13 @@ public class InterfazLoginCliente {
 				}
 				System.out.println(cliente.estado);
 				if(cliente.estado == Cliente.LOGGEADO) {
-					InterfazSalas principal = new InterfazSalas();
-					frame.dispose();
+					InterfazSalas principal = new InterfazSalas(cliente);
+					principal.start();
 					JOptionPane.showMessageDialog(null, "Conectado al servidor", "", JOptionPane.INFORMATION_MESSAGE);
-				}else if(cliente.estado == Cliente.USUARIO_EN_USO) {
-					JOptionPane.showMessageDialog(null, "El usuario ya está en uso.", "", JOptionPane.INFORMATION_MESSAGE);
+					textFieldUsuario.setText("si");
 				}
 			}
 		});
-		btnIniciarSesion.setEnabled(false);
 	}
 
 }

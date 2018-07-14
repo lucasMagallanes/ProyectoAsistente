@@ -25,7 +25,6 @@
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.7.2.jar"/>
 	<classpathentry kind="src" path="config"/>
 	<classpathentry kind="lib" path="lib/jgoodies-forms-1.8.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gson"/>
 	<classpathentry kind="lib" path="lib/gson-2.8.5.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.8.5-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
