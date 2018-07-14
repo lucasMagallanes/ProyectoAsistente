@@ -3,6 +3,10 @@ package server;
 import com.google.gson.*;
 
 public class Mensaje {
+	public void setDestino(String destino) {
+		this.destino = destino;
+	}
+
 	public final static int LOGGEAR = 0;
 	public final static int ACTUALIZAR = 1;
 	public final static int ACTUALIZAR_SALAS = 2;
@@ -71,7 +75,7 @@ public class Mensaje {
 		return this.tipoMensaje;
 	}
 	
-	String getOrigen() {
+	public String getOrigen() {
 		return this.origen;
 	}
 	
