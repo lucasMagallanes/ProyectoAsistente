@@ -10,6 +10,7 @@ public class Mensaje {
 	public final static int BROADCAST = 4;
 	public final static int DESCONECTAR = 5;
 	public final static int NUEVA_SALA = 6;
+	public final static int USUARIO_EN_USO = 7;
 	
 	private int tipoMensaje;
 	private int sala;
